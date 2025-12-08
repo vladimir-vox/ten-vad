@@ -6,6 +6,7 @@ examples/build-windows/
 examples/build-web/
 examples_onnx/cpp/build-linux
 examples_onnx/cpp/build-macos
+examples_onnx/cpp/build-android
 include/.DS_Store
 lib/.DS_Store
 examples/.DS_Store
@@ -17,3 +18,6 @@ examples/out.txt
 # Python extension module for TEN VAD C++/C and ONNX runtime.
 examples_onnx/python/build-linux
 examples_onnx/python/build-macos
+
+# Build artifacts
+build/

@@ -17,12 +17,20 @@ add_compile_options(-Wno-write-strings -Wno-unused-result)
 include_directories(${ROOT}/src)
 include_directories(${ROOT}/include)
 include_directories(${ORT_ROOT}/include)
+
+# For Android builds from source, add extra header path
+if(ANDROID)
+    include_directories(${ORT_ROOT}/include/onnxruntime/core/session)
+endif()
 file(GLOB LIBRARY_SOURCES "${ROOT}/src/*.cc" "${ROOT}/src/*.c")
 add_library(ten_vad SHARED ${LIBRARY_SOURCES})
-link_directories(${ORT_ROOT}/lib)
 
 # Platform-specific ONNX Runtime linking
-if(APPLE)
+if(ANDROID)
+    # Android builds from source: library is in build/Android/${ANDROID_ABI}/
+    target_link_libraries(ten_vad "${ORT_ROOT}/build/Android/${ANDROID_ABI}/libonnxruntime.so")
+elseif(APPLE)
+    link_directories(${ORT_ROOT}/lib)
     target_link_libraries(ten_vad "${ORT_ROOT}/lib/libonnxruntime.dylib")
     # Set rpath for macOS
     set_target_properties(ten_vad PROPERTIES
@@ -30,6 +38,7 @@ if(APPLE)
         BUILD_WITH_INSTALL_RPATH TRUE
     )
 else()
+    link_directories(${ORT_ROOT}/lib)
     target_link_libraries(ten_vad "${ORT_ROOT}/lib/libonnxruntime.so")
 endif()
 
