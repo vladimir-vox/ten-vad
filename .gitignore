@@ -7,6 +7,7 @@ examples/build-web/
 examples_onnx/cpp/build-linux
 examples_onnx/cpp/build-macos
 examples_onnx/cpp/build-android
+examples_onnx/cpp/build-ios
 include/.DS_Store
 lib/.DS_Store
 examples/.DS_Store

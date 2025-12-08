@@ -20,6 +20,9 @@
 #include <TargetConditionals.h>
 #if TARGET_OS_IPHONE
 #include "sample_array.h"
+#include <CoreFoundation/CoreFoundation.h>
+#include <unistd.h>
+#include <limits.h>
 #endif
 #endif
 
@@ -175,6 +178,33 @@ int test_with_wav(int argc, char *argv[])
 // Used for iOS APP demo
 int test_with_array()
 {
+  // Debug: Print current working directory
+  char cwd[PATH_MAX];
+  if (getcwd(cwd, sizeof(cwd)) != NULL) {
+    printf("Current working directory: %s\n", cwd);
+  }
+
+  // Print bundle path
+  CFBundleRef mainBundle = CFBundleGetMainBundle();
+  if (mainBundle) {
+    CFURLRef bundleURL = CFBundleCopyBundleURL(mainBundle);
+    char bundlePath[PATH_MAX];
+    if (CFURLGetFileSystemRepresentation(bundleURL, true, (UInt8 *)bundlePath, PATH_MAX)) {
+      printf("App bundle path: %s\n", bundlePath);
+    }
+    CFRelease(bundleURL);
+  }
+
+  // Change to app bundle directory so relative paths work
+  CFBundleRef bundle = CFBundleGetMainBundle();
+  CFURLRef url = CFBundleCopyBundleURL(bundle);
+  char path[PATH_MAX];
+  if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)path, PATH_MAX)) {
+    chdir(path);
+    printf("Changed directory to: %s\n", path);
+  }
+  CFRelease(url);
+
   char *input_buf = (char *)sample_array;
   uint32_t byte_num = sizeof(sample_array) / sizeof(sample_array[0]);
   printf("WAV file byte num: %d\n", byte_num);

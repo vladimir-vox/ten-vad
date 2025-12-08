@@ -664,7 +664,26 @@ You can check the official **ONNX Runtime releases** from [this website](https:/
 Xcode (15.2, macOS verified)
 CMake (3.19.2, macOS verified)
 
-##### **Usage**
+##### **Usage (Prebuilt Framework)**
+
+The iOS framework has ONNX Runtime statically linked - no external dependencies needed.
+
+1. Add `lib/iOS/ten_vad.xcframework` to your Xcode project
+2. Include the ONNX model file (`src/onnx_model/ten-vad.onnx`) in your app bundle
+3. See `lib/iOS/README.md` for detailed integration instructions
+
+##### **Usage (Building from Source with ONNX)**
+
+To rebuild the framework with static ONNX Runtime:
+
+```bash
+cd scripts
+bash build-ios.sh
+```
+
+This requires the ONNX Runtime pod archive. Set `ORT_POD_PATH` to point to your extracted pod archive.
+
+For the demo app:
 
 1. Enter examples directory
 
